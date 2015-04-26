@@ -1,0 +1,20 @@
+parameters:
+    userRelational_class:
+    relationship_class:
+
+services:
+    joubjoub_relationship.user_provider:
+        class: Joubjoub\RelationshipBundle\Provider\UserProvider
+        arguments: [@security.context]
+        
+    joubjoub_relationship.relationship_manager:
+        class: Joubjoub\RelationshipBundle\Manager\RelationshipManager
+        arguments: [@doctrine.orm.entity_manager, "%relationship_class%" ]
+        
+    joubjoub_relationship.relational_manager:
+        class: Joubjoub\RelationshipBundle\Manager\UserRelationalManager
+        arguments: [@joubjoub_relationship.user_provider, @doctrine.orm.entity_manager, "%userRelational_class%"]
+        
+    joubjoub_relationship.provider:
+        class: Joubjoub\RelationshipBundle\Provider\Provider
+        arguments: [@joubjoub_relationship.relationship_manager, @joubjoub_relationship.relational_manager]
