@@ -3,9 +3,9 @@
 namespace Joubjoub\RelationshipBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-use Joubjoub\RelationshipBundle\Model\UserRelationshipInterface;
+use Joubjoub\RelationshipBundle\Model\UserRelationalInterface;
 
-abstract class User implements UserRelationshipInterface {
+abstract class User implements UserRelationalInterface {
 
     /**
      * @var mixed
