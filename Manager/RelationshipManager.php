@@ -26,6 +26,13 @@ class RelationshipManager extends BaseManager {
         $this->em->remove($relationship);
         $this->em->flush();
     }
+    
+    public function saveRelation(RelationshipInterface $relation) {
+        $this->em->persist($relation);
+        $this->em->flush();
+    }
+    
+    
 
     public function findOneById($id) {
         return $this->repository->findOneById($id);

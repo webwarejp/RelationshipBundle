@@ -3,9 +3,7 @@
     "description": "Provides relationship between users (like friendship...) for your Symfony2 application.",
     "license": "MIT",
     "require": {
-        "symfony/symfony": ">=2.1,<2.7-dev",
-        "gregwar/form-bundle": "dev-master",
-        "joubjoub/user-form-bundle": "dev-master"
+        "symfony/symfony": ">=2.1,<2.7-dev"
     },
     "autoload": {
         "psr-0": { "Joubjoub\\RelationshipBundle": "" }

@@ -3,4 +3,10 @@
 namespace Joubjoub\RelationshipBundle\Provider;
 
 
-interface RsProviderInterface {}
+interface RsProviderInterface {
+    
+    public function getRelationshipManager();
+    
+    public function getUserRelationalManager();
+    
+}
