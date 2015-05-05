@@ -13,11 +13,12 @@ class RelationshipManager extends BaseManager {
         parent::__construct($em, $class);
     }
 
-    public function create(UserRelationalInterface $userRelational, UserRelationalInterface $userAdded) {
+    public function create(UserRelationalInterface $userRelational, UserRelationalInterface $userAdded,
+            $status = RelationshipInterface::RELATION_ASK, $type = RelationshipInterface::TYPE_DEFAULT ) {
         $rsClass = $this->getClass();
         $relationship = new $rsClass($userRelational, $userAdded);
-        $relationship->setStatus(RelationshipInterface::RELATION_ASK);
-        $relationship->setType(RelationshipInterface::TYPE_DEFAULT);
+        $relationship->setStatus($status);
+        $relationship->setType($type);
         $this->em->persist($relationship);
         $this->em->flush();
     }

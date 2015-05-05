@@ -5,7 +5,7 @@ namespace Joubjoub\RelationshipBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Joubjoub\RelationshipBundle\Manager\BaseManager;
-use Joubjoub\RelationshipBundle\Provider\UserProviderInterface;
+use Joubjoub\Tools\Provider\UserProviderInterface;
 use Joubjoub\RelationshipBundle\Model\UserRelationalInterface;
 
 class UserRelationalManager extends BaseManager {

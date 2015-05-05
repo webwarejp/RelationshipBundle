@@ -6,7 +6,7 @@ parameters:
     
 services:
     joubjoub_relationship.user_provider:
-        class: Joubjoub\RelationshipBundle\Provider\UserProvider
+        class: Joubjoub\Tools\Provider\UserProvider
         arguments: [@security.context]
         
         

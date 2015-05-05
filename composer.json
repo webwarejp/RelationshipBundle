@@ -3,7 +3,8 @@
     "description": "Provides relationship between users (like friendship...) for your Symfony2 application.",
     "license": "MIT",
     "require": {
-        "symfony/symfony": ">=2.1,<2.7-dev"
+        "symfony/symfony": ">=2.1,<2.7-dev",
+        "joubjoub/tools": "dev-master"
     },
     "autoload": {
         "psr-0": { "Joubjoub\\RelationshipBundle": "" }
