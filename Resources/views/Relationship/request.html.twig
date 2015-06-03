@@ -1,34 +1,12 @@
 {% block joubjoub_relationship %}
-    <div class="row">
-        <h3>All Relationship List </h3>
-        {% if RelationList is not empty %}
-            {% for relation in RelationList %}
-                {% if relation.user.username == userRelational.username %}
-                    <div> 
-                        <b>{{relation.user.username}}</b>  
-                        <span style="color: red;font-size:15px;">YOU ARE </span>  in relation type: <b>{{relation.type }} </b>  and statut {{relation.status }}
-                        with <b>({{relation.relatedUser.username}})</b> 
-                    </div>
-                {% else %}
-                    <div> <b> {{relation.user.username}}</b>  
-                        is in relation type: <b>{{relation.type }} </b>  and statut {{relation.status }} 
-                        <span style="color: red;font-size:15px;">WITH YOU</span>  
-                        <b>({{relation.relatedUser.username}})</b> 
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    </div>
-
-    <br />    <br />    <br />
-
+   
     <div class="row">
         <h3>Relation Request you get</h3>
         {% for k,elem in formList %}
-            {% if elem.relationship.user.username != userRelational.username %}
+            {% if elem.relationship.linker.username != linker.username %}
 
                 <form id='form-request-{{k}}' class="form-request" action="{{ path('joubjoub_relationship_update', {'rid': elem.relationship.id}) }}" method="post" novalidate='novalidate'>
-                    <div> <b> {{elem.relationship.user.username}}</b>  <span style="color: red;font-size:15px;">ASKED YOU</span>  a relation<b>({{elem.relationship.relatedUser.username}})</b> </div>
+                    <div> <b> {{elem.relationship.linker.username}}</b>  <span style="color: red;font-size:15px;">ASKED YOU</span>  a relation<b>({{elem.relationship.linked.username}})</b> </div>
                     {{form_widget(elem.form)}}
                     <input type="submit" name="" />
                 </form>
@@ -40,10 +18,10 @@
     <div class="row">
         <h3>Relation Request you sent</h3>
         {% for k,elem in formList %}
-            {% if elem.relationship.user.username == userRelational.username %}
+            {% if elem.relationship.linker.username == linker.username %}
 
                 <form id='form-request-{{k}}' class="form-request" action="{{ path('joubjoub_relationship_update', {'rid': elem.relationship.id}) }}" method="post" novalidate='novalidate'>
-                    <div> <b>{{elem.relationship.user.username}}</b>  <span style="color: red;font-size:15px;">YOU ASKED </span>  a relation to <b>({{elem.relationship.relatedUser.username}})</b> </div>
+                    <div> <b>{{elem.relationship.linker.username}}</b>  <span style="color: red;font-size:15px;">YOU ASKED </span>  a relation to <b>({{elem.relationship.linked.username}})</b> </div>
                     {{form_widget(elem.form)}}
                     <input type="submit" name="" />
                 </form>

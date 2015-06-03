@@ -5,7 +5,7 @@ namespace Joubjoub\RelationshipBundle\Form\Handler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Joubjoub\RelationshipBundle\Model\RelationshipInterface;
-use Joubjoub\RelationshipBundle\Provider\RsProviderInterface;
+use Joubjoub\RelationshipBundle\Relationship;
 
 
 class RelationshipHandler {
@@ -14,7 +14,7 @@ class RelationshipHandler {
     protected $provider;
     Protected $relationManager;
 
-    public function __construct(RequestStack $request, RsProviderInterface $provider) {
+    public function __construct(RequestStack $request, Relationship $provider) {
         $this->request = $request->getCurrentRequest();
         $this->provider = $provider;
         $this->relationManager = $provider->getRelationshipManager();
@@ -32,7 +32,7 @@ class RelationshipHandler {
     }
 
     protected function onSuccess(RelationshipInterface $relation) {
-       $this->relationManager->saveRelation($relation);
+       $this->relationManager->save($relation);
        return $relation;
     }
 

@@ -3,24 +3,32 @@
 namespace Joubjoub\RelationshipBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Joubjoub\RelationshipBundle\Manager\BaseManager;
-use Joubjoub\RelationshipBundle\Model\UserRelationalInterface;
+use Joubjoub\RelationshipBundle\Model\LinkableInterface;
 use Joubjoub\RelationshipBundle\Model\RelationshipInterface;
 
-class RelationshipManager extends BaseManager {
+class RelationshipManager {
 
-    public function __construct(EntityManagerInterface $em, $class) {
-        parent::__construct($em, $class);
+    protected $em;
+    protected $class;
+    protected $repository;
+
+    public function getClass() {
+        return $this->class;
     }
 
-    public function create(UserRelationalInterface $userRelational, UserRelationalInterface $userAdded,
-            $status = RelationshipInterface::RELATION_ASK, $type = RelationshipInterface::TYPE_DEFAULT ) {
+    public function __construct(EntityManagerInterface $em, $class) {
+        $this->em = $em;
+        $this->class = $em->getClassMetadata($class)->name;
+        $this->repository = $em->getRepository($class);
+    }
+
+    public function create(LinkableInterface $linker, LinkableInterface $linked, $type = RelationshipInterface::TYPE_DEFAULT, $status = RelationshipInterface::RELATION_ASK) {
         $rsClass = $this->getClass();
-        $relationship = new $rsClass($userRelational, $userAdded);
+        $relationship = new $rsClass($linker, $linked);
         $relationship->setStatus($status);
         $relationship->setType($type);
-        $this->em->persist($relationship);
-        $this->em->flush();
+        $this->save($relationship);
+        return $relationship;
     }
 
     public function remove(RelationshipInterface $relationship) {
@@ -28,83 +36,76 @@ class RelationshipManager extends BaseManager {
         $this->em->flush();
     }
     
-    public function saveRelation(RelationshipInterface $relation) {
+    public function save(RelationshipInterface $relation, $flush = true) {
         $this->em->persist($relation);
-        $this->em->flush();
+        if($flush) {
+            $this->em->flush();
+        }
     }
-    
-    
 
+    
     public function findOneById($id) {
-        return $this->repository->findOneById($id);
+        return $this->repository->findOneBy(array('id'=>$id));
     }
-
-    public function findOneRelationshipBetweenUsers(UserRelationalInterface $user, UserRelationalInterface $user2) {
+    
+    public function findOneBetweenLinkable(LinkableInterface $linker, LinkableInterface $linked) {
         $qb = $this->repository->createQueryBuilder('rs')
-                ->join('rs.relatedUser', 'u')
-                ->where('rs.user = :user AND u = :user2 ')
-                ->orWhere('rs.user = :user2 AND u= :user ');
-        $qb->setParameter("user", $user);
-        $qb->setParameter("user2", $user2);
+                ->join('rs.linked', 'u')
+                ->where('rs.linker = :linkable AND u = :linkable2 ')
+                ->orWhere('rs.linker = :linkable2 AND u= :linkable ');
+        $qb->setParameter("linkable", $linker);
+        $qb->setParameter("linkable2", $linked);
         $resultat = $qb->getQuery()->getResult();
         return $resultat;
     }
-
-    public function findAllRelationshipByUser(UserRelationalInterface $user) {
+    
+    public function findOneBetweenLinkableByType(LinkableInterface $linker, LinkableInterface $linked, $type) {
         $qb = $this->repository->createQueryBuilder('rs')
-                ->join('rs.relatedUser', 'ru')
-                ->join('rs.user', 'u')
-                ->where('rs.user = :user')
-                ->orWhere('rs.relatedUser = :user ');
-        
-        $qb->setParameter("user", $user);
+                ->join('rs.linked', 'u')
+                ->where('rs.linker = :linkable AND u = :linkable2 ')
+                ->orWhere('rs.linker = :linkable2 AND u= :linkable ')
+                ->andWhere('rs.type = :type');
+        $qb->setParameter("linkable", $linker);
+        $qb->setParameter("linkable2", $linked);
+        $qb->setParameter("type", $type);
+        $resultat = $qb->getQuery()->getResult();
+        return $resultat;
+    }
+    
+    public function findRelationshipsByLinkable(LinkableInterface $linkable) {
+        $qb = $this->initQb();
+        $qb->setParameter("linkable", $linkable);
         $result = $qb->getQuery()->getResult();
         return $result;
     }
     
-    public function findAllRelationshipByUserAndStatus(UserRelationalInterface $user, $status) {
-        $qb = $this->repository->createQueryBuilder('rs')
-                ->join('rs.relatedUser', 'ru')
-                ->join('rs.user', 'u')
-                ->where('rs.user = :user')
-                ->orWhere('rs.relatedUser = :user ')
-                ->andWhere('rs.status = :status');
+    public function findRelationshipsByLinkableAndStatus(LinkableInterface $linkable, $status) {
+        $qb = $this->initQb()->andWhere('rs.status = :status');
         $qb->setParameter("status", $status);
-        $qb->setParameter("user", $user);
+        $qb->setParameter("linkable", $linkable);
         $result = $qb->getQuery()->getResult();
         return $result;
-    }
-
-    public function findAllRelationshipByUserAndStatusAndType(UserRelationalInterface $user, $status, $type) {
-        $qb = $this->repository->createQueryBuilder('rs')
-                ->join('rs.relatedUser', 'ru')
-                ->join('rs.user', 'u')
-                ->where('rs.user = :user')
-                ->orWhere('rs.relatedUser = :user')
-                ->andWhere('rs.type = :type')
-                ->andWhere('rs.status = :status');
+     }
+    
+    public function findRelationshipsByLinkableAndStatusAndType(LinkableInterface $linkable, $status, $type) {
+        $qb = $this->initQb()
+                ->andWhere('rs.status = :status')
+                ->andWhere('rs.type = :type');
         $qb->setParameter("type", $type);
         $qb->setParameter("status", $status);
-        $qb->setParameter("user", $user);
+        $qb->setParameter("linkable", $linkable);
 
         $result = $qb->getQuery()->getResult();
         return $result;
     }
-
-    public function IsStatusAvailable() {
-        
-    }
-
-    public function IsTypeAvailable() {
-        
-    }
-
     
-//    public function update(UserRelationalInterface $userRelational, UserRelationalInterface $userRemove) {
-//        $relationship = $this->findOneRelationship($userRelational, $userRemove);
-//         $relationship->setStatus(RelationshipInterface::RELATION_CANCELED);
-//        $this->em->persist($relationship);
-//        $this->em->flush();
-//    }
     
+    private function initQb() {
+         $qb = $this->repository->createQueryBuilder('rs')
+                ->join('rs.linked', 'ru')
+                ->join('rs.linker', 'u')
+                ->where('rs.linker = :linkable')
+                ->orWhere('rs.linked = :linkable');
+         return $qb;
+    } 
 }

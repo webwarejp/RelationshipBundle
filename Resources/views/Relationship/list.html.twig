@@ -3,21 +3,21 @@
         <h3>All Relationship List : {{nbRelation}} relations </h3>
         {% if RelationList is not empty %}
             {% for relation in RelationList %}
-                {% if relation.user.username == userRelational.username %}
+                {% if relation.linker.username == linker.username %}
                     
                     <div> 
-                        <b>{{relation.user.username}}</b>  
+                        <b>{{relation.linker.username}}</b>  
                         <span style="color: red;font-size:15px;">YOU ARE </span>  in relation type: <b>{{relation.type }} </b>  and statut {{relation.status }}
-                        with <b>({{relation.relatedUser.username}})</b> 
+                        with <b>({{relation.linked.username}})</b> 
                     </div>
                     <a href="{{url('joubjoub_relationship_delete', {'rid': relation.id})}}"> delete relation</a>
                     
                 {% else %}
                     
-                    <div> <b> {{relation.user.username}}</b>  
+                    <div> <b> {{relation.linker.username}}</b>  
                         is in relation type: <b>{{relation.type }} </b>  and statut {{relation.status }} 
                         <span style="color: red;font-size:15px;">WITH YOU</span>  
-                        <b>({{relation.relatedUser.username}})</b> 
+                        <b>({{relation.linked.username}})</b> 
                     </div>
                     <a href="{{url('joubjoub_relationship_delete', {'rid': relation.id})}}"> delete relation</a>
 

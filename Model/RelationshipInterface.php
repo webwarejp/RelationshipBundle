@@ -1,8 +1,7 @@
 <?php
-
 namespace Joubjoub\RelationshipBundle\Model;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Joubjoub\RelationshipBundle\Model\LinkableInterface;
 
 interface RelationshipInterface {
     
@@ -10,12 +9,15 @@ interface RelationshipInterface {
     const RELATION_CONFIRMED = 1;
     const RELATION_DENY = 2;
     
-    const TYPE_DEFAULT= 'relation';    
+    const TYPE_DEFAULT = 'relation';    
     const TYPE_FRIEND = 'friend';
+    const TYPE_SPONSOR = 'sponsor';
     const TYPE_FAMILY = 'family';
     const TYPE_COWORKER = 'coworker';
     const TYPE_SEXEFRIEND = 'sexefriend'; /* bad boy ;)*/
+    
     /*...*/
+    
     
     /**
      * Gets the relationship id
@@ -30,7 +32,7 @@ interface RelationshipInterface {
      *
      * @return RelationshipInterface
      */
-    public function setUser(UserInterface $user);
+    public function setLinker(LinkableInterface $linker);
     
     
     /**
@@ -38,7 +40,7 @@ interface RelationshipInterface {
      *
      * @return UserInterface
      */
-    public function getUser();
+    public function getLinker();
     
     
     /**
@@ -46,7 +48,7 @@ interface RelationshipInterface {
      *
      * @return RelationshipInterface
      */
-    public function setRelatedUser(UserInterface $relatedUser);
+    public function setLinked(LinkableInterface $linked);
    
     
     /**
@@ -54,7 +56,7 @@ interface RelationshipInterface {
      *
      * @return UserInterface
      */
-    public function getRelatedUser();
+    public function getLinked();
     
     
     /**
@@ -76,7 +78,7 @@ interface RelationshipInterface {
     /**
      * Set type
      *
-     * @param string $type
+     * @param mixed $type
      * @return RelationshipInterface
      */
     public function setType($type);
@@ -84,7 +86,7 @@ interface RelationshipInterface {
     /**
      * Get type
      *
-     * @return string 
+     * @return mixed 
      */
     public function getType();
     

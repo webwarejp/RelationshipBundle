@@ -1,10 +1,9 @@
 {
     "name": "joubjoub/relationship-bundle",
-    "description": "Provides relationship between users (like friendship...) for your Symfony2 application.",
+    "description": "Provides relationship between linkable object (like friendship...) for your Symfony2 application.",
     "license": "MIT",
     "require": {
-        "symfony/symfony": ">=2.1,<2.7-dev",
-        "joubjoub/tools": "dev-master"
+        "symfony/symfony": ">=2.1,<2.7-dev"
     },
     "autoload": {
         "psr-0": { "Joubjoub\\RelationshipBundle": "" }

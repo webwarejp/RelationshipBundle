@@ -2,17 +2,17 @@ joubjoub_relationship_list:
     path: /relationship/list
     defaults: {_controller: JoubjoubRelationshipBundle:Relationship:list}
     
-joubjoub_relationship_request:
-    path: /relationship/request
-    defaults: {_controller: JoubjoubRelationshipBundle:Relationship:request}
-    
 joubjoub_relationship_add:
-    path: /relationship/add/user/{uid}
-    defaults: {_controller: JoubjoubRelationshipBundle:Relationship:addUser}
+    path: /relationship/add/user/{linkedId}
+    defaults: {_controller: JoubjoubRelationshipBundle:Relationship:add}
     
 joubjoub_relationship_delete:
     path: /relationship/delete/{rid}
     defaults: {_controller: JoubjoubRelationshipBundle:Relationship:delete}
+    
+joubjoub_relationship_request:
+    path: /relationship/request
+    defaults: {_controller: JoubjoubRelationshipBundle:Relationship:request}
 
 joubjoub_relationship_update:
     path: /relationship/update/{rid}

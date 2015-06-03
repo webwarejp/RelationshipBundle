@@ -3,7 +3,6 @@
 namespace Joubjoub\RelationshipBundle\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
 
 use Joubjoub\RelationshipBundle\Model\RelationshipInterface;
@@ -31,17 +30,13 @@ class RelationshipType extends AbstractType {
                         RelationshipInterface::TYPE_FRIEND => 'friend',
                         RelationshipInterface::TYPE_FAMILY => 'family',
                         RelationshipInterface::TYPE_COWORKER => 'coworker',
+                        RelationshipInterface::TYPE_SPONSOR => 'sponsor',
                         RelationshipInterface::TYPE_SEXEFRIEND => 'sexefriend',
                     ),
                     'expanded' => true,
                     'multiple' => false,
                 ))
         ;
-    }
-
-    public function setDefaultOption(OptionsResolverInterface $resolver) {
-        $resolver->setDefaults(array(
-        ));
     }
 
     /**

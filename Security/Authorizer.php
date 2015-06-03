@@ -2,59 +2,73 @@
 
 namespace Joubjoub\RelationshipBundle\Security;
 
-use Joubjoub\RelationshipBundle\Security\AuthorizerInterface;
-use Joubjoub\RelationshipBundle\Manager\UserRelationalManager;
 use Joubjoub\RelationshipBundle\Manager\RelationshipManager;
-use Joubjoub\RelationshipBundle\Model\UserRelationalInterface;
+use Joubjoub\RelationshipBundle\Security\AuthorizerInterface;
+use Joubjoub\RelationshipBundle\Model\LinkableInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Authorizer implements AuthorizerInterface {
 
-    /**
-     *
-     * @var UserRelationalManager
-     */
-    protected $userRelationalManager;
-
-    /**
-     *
-     * @var RelationshipManager 
-     */
     protected $relationshipManager;
-
-    public function __construct(UserRelationalManager $userRelationalManager, RelationshipManager $relationshipManager) {
-        $this->userRelationalManager = $userRelationalManager;
+    
+    public function __construct(RelationshipManager $relationshipManager) {
         $this->relationshipManager = $relationshipManager;
     }
-
-    /**
-     *
-     * @param UserRelationalInterface $userAdded
-     * @return boolean
-     */
-    public function canAddUser(UserRelationalInterface $userAdded) {
-        $isSameUser = $this->getAuthenticatedUser() === $userAdded ? true : false;
-        if ($isSameUser) {
-            return false;
+    
+    public function checkAuthanticity ($linkable) {
+        if($linkable === null) {
+            throw new NotFoundHttpException('Linker not found');
         }
-        return $this->existRelationship($userAdded) ? false : true;
+        if (!$linkable instanceof LinkableInterface) {
+            throw new \UnexpectedValueException('Not linkable');
+        }
+        return true;
+    }
+    
+    public function canLink(LinkableInterface $linker, LinkableInterface $linked, $type) {
+        $this->checkAuthanticity($linker);
+        $this->checkAuthanticity($linked);
+        
+        if ($this->IsSame($linker, $linked)) {
+           throw new \Exception('Linker and linked cant be equals');
+        }
+        if($this->existRelationshipByType($linker, $linked, $type)) {
+            throw new \Exception('A link already exist between this 2 linkable');
+        }
+        return true;
+    }
+    
+    /**
+     * 
+     * @param LinkableInterface $linker
+     * @param LinkableInterface $linked
+     * @return Boolean
+     */
+    protected function IsSame(LinkableInterface $linker, LinkableInterface $linked) {
+        return $linker === $linked ? true : false;
     }
 
     /**
      * 
-     * @param UserRelationalInterface $userAdded
+     * @param LinkableInterface $linker
+     * @param LinkableInterface $linked
      * @return Boolean
      */
-    public function existRelationship(UserRelationalInterface $userAdded) {
-        $relationship = $this->relationshipManager->findOneRelationshipBetweenUsers($this->getAuthenticatedUser(), $userAdded);
+    protected function existRelationship(LinkableInterface $linker, LinkableInterface $linked) {
+        $relationship = $this->relationshipManager->findOneBetweenLinkable($linker, $linked);
         return !empty($relationship) ? true : false;
     }
-
+    
     /**
-     *
-     * @return UserInterface
+     * 
+     * @param LinkableInterface $linker
+     * @param LinkableInterface $linked
+     * @param type $type
+     * @return type
      */
-    protected function getAuthenticatedUser() {
-        return $this->userRelationalManager->getAuthanticatedUser();
+    protected function existRelationshipByType(LinkableInterface $linker, LinkableInterface $linked, $type) {
+        $relationship = $this->relationshipManager->findOneBetweenLinkableByType($linker, $linked, $type);
+        return !empty($relationship) ? true : false;
     }
-
+    
 }

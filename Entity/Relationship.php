@@ -2,7 +2,7 @@
 
 namespace Joubjoub\RelationshipBundle\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Joubjoub\RelationshipBundle\Model\LinkableInterface;
 use Joubjoub\RelationshipBundle\Model\RelationshipInterface;
 
 abstract class Relationship implements RelationshipInterface {
@@ -17,15 +17,15 @@ abstract class Relationship implements RelationshipInterface {
 
     /**
      *
-     * @var UserInterface 
+     * @var LinkableInterface 
      */
-    protected $user;
+    protected $linker;
 
     /**
      *
-     * @var UserInterface 
+     * @var LinkableInterface 
      */
-    protected $relatedUser;
+    protected $linked;
 
     /**
      *
@@ -51,9 +51,9 @@ abstract class Relationship implements RelationshipInterface {
      */
     protected $updated;
 
-    public function __construct(UserInterface $user, UserInterface $relatedUser) {
-        $this->user = $user;
-        $this->relatedUser = $relatedUser;
+    public function __construct(LinkableInterface $linker, LinkableInterface $linked) {
+        $this->linker = $linker;
+        $this->linked = $linked;
         $this->status = self::RELATION_ASK;
         $this->type = self::TYPE_DEFAULT;
     }
@@ -72,8 +72,8 @@ abstract class Relationship implements RelationshipInterface {
      *
      * @return RelationshipInterface
      */
-    public function setUser(UserInterface $user) {
-        $this->user = $user;
+    public function setLinker(LinkableInterface $linker) {
+        $this->linker = $linker;
         return $this;
     }
 
@@ -82,27 +82,27 @@ abstract class Relationship implements RelationshipInterface {
      *
      * @return UserInterface
      */
-    public function getUser() {
-        return $this->user;
+    public function getLinker() {
+        return $this->linker;
     }
 
     /**
      * Set relatedUser
      *
-     * @return RelationshipInterface
+     * @return LinkableInterface
      */
-    public function setRelatedUser(UserInterface $relatedUser) {
-        $this->relatedUser = $relatedUser;
+    public function setLinked(LinkableInterface $linked) {
+        $this->linked = $linked;
         return $this;
     }
 
     /**
      * Get relatedUser
      *
-     * @return UserInterface
+     * @return LinkableInterface
      */
-    public function getRelatedUser() {
-        return $this->relatedUser;
+    public function getLinked() {
+        return $this->linked;
     }
 
     /**
@@ -128,7 +128,7 @@ abstract class Relationship implements RelationshipInterface {
     /**
      * Set type
      *
-     * @param string $type
+     * @param mixed $type
      * @return RelationshipInterface
      */
     public function setType($type) {
@@ -139,7 +139,7 @@ abstract class Relationship implements RelationshipInterface {
     /**
      * Get type
      *
-     * @return string 
+     * @return mixed 
      */
     public function getType() {
         return $this->type;
@@ -189,7 +189,7 @@ abstract class Relationship implements RelationshipInterface {
      * @return array of available status
      */
     public static function getAvailableStatus() {
-        return array(self::RELATION_ASK,self::RELATION_CONFIRMED, self::RELATION_DENY);
+        return array(self::RELATION_ASK, self::RELATION_CONFIRMED, self::RELATION_DENY);
     }
     
     /**

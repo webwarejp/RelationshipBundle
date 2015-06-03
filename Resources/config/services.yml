@@ -1,30 +1,25 @@
 parameters:
-    userRelational_class:
+#    userRelational_class:
     relationship_class:
     relationship_form_type: "Joubjoub\RelationshipBundle\Form\RelationshipType"
     relationship_form_name: "relationship_form_name"
     
 services:
-    joubjoub_relationship.user_provider:
-        class: Joubjoub\Tools\Provider\UserProvider
-        arguments: [@security.context]
+    joubjoub_relationship.provider:
+        class: Joubjoub\RelationshipBundle\Relationship
+        arguments: [@joubjoub_relationship.relationship_manager, @joubjoub_relationship.authorizer, @event_dispatcher]
         
+#    joubjoub_relationship.linker_manager:
+#        class: Joubjoub\RelationshipBundle\Manager\LinkerManager
+#        arguments: [@doctrine.orm.entity_manager, "%userRelational_class%"]
         
     joubjoub_relationship.relationship_manager:
         class: Joubjoub\RelationshipBundle\Manager\RelationshipManager
         arguments: [@doctrine.orm.entity_manager, "%relationship_class%" ]
-    joubjoub_relationship.relational_manager:
-        class: Joubjoub\RelationshipBundle\Manager\UserRelationalManager
-        arguments: [@joubjoub_relationship.user_provider, @doctrine.orm.entity_manager, "%userRelational_class%"]
         
-    joubjoub_relationship.provider:
-        class: Joubjoub\RelationshipBundle\Provider\Provider
-        arguments: [@joubjoub_relationship.relationship_manager, @joubjoub_relationship.relational_manager, @joubjoub_relationship.authorizer]
-    
     joubjoub_relationship.authorizer:
         class: Joubjoub\RelationshipBundle\Security\Authorizer
-        arguments: [@joubjoub_relationship.relational_manager, @joubjoub_relationship.relationship_manager]    
-        
+        arguments: [@joubjoub_relationship.relationship_manager]    
         
     joubjoub_relationship.relationship_form_factory:
         class: Joubjoub\RelationshipBundle\Form\Factory\RelationshipFormFactory

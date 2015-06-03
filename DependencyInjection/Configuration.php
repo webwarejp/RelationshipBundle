@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('joubjoub_relationship');
 
          $rootNode->children()
-                ->scalarNode('userRelational_class')->isRequired()->cannotBeEmpty()->end()
+//                ->scalarNode('userRelational_class')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('relationship_class')->isRequired()->cannotBeEmpty()->end()
                 ->end();
         return $treeBuilder;

@@ -25,7 +25,7 @@ class JoubjoubRelationshipExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         
-        $container->setParameter('userRelational_class', $config['userRelational_class']);
+//        $container->setParameter('userRelational_class', $config['userRelational_class']);
         $container->setParameter('relationship_class', $config['relationship_class']);
     }
 }
