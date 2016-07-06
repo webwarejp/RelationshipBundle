@@ -7,7 +7,7 @@ parameters:
 services:
     joubjoub_relationship.provider:
         class: Joubjoub\RelationshipBundle\Relationship
-        arguments: [@joubjoub_relationship.relationship_manager, @joubjoub_relationship.authorizer, @event_dispatcher]
+        arguments: ["@joubjoub_relationship.relationship_manager", "@joubjoub_relationship.authorizer", "@event_dispatcher"]
         
 #    joubjoub_relationship.linker_manager:
 #        class: Joubjoub\RelationshipBundle\Manager\LinkerManager
@@ -15,15 +15,15 @@ services:
         
     joubjoub_relationship.relationship_manager:
         class: Joubjoub\RelationshipBundle\Manager\RelationshipManager
-        arguments: [@doctrine.orm.entity_manager, "%relationship_class%" ]
+        arguments: ["@doctrine.orm.entity_manager", "%relationship_class%" ]
         
     joubjoub_relationship.authorizer:
         class: Joubjoub\RelationshipBundle\Security\Authorizer
-        arguments: [@joubjoub_relationship.relationship_manager]    
+        arguments: ["@joubjoub_relationship.relationship_manager"]    
         
     joubjoub_relationship.relationship_form_factory:
         class: Joubjoub\RelationshipBundle\Form\Factory\RelationshipFormFactory
-        arguments: [@form.factory, "%relationship_form_type%" , "%relationship_form_name%"]
+        arguments: ["@form.factory", "%relationship_form_type%" , "%relationship_form_name%"]
     joubjoub_relationship.relationship_form_handler:
         class: Joubjoub\RelationshipBundle\Form\Handler\RelationshipHandler
-        arguments: [@request_stack, @joubjoub_relationship.provider]
+        arguments: ["@request_stack", "@joubjoub_relationship.provider"]
