@@ -3,7 +3,7 @@
     "description": "Provides relationship between linkable object (like friendship...) for your Symfony2 application.",
     "license": "MIT",
     "require": {
-        "symfony/symfony": "~2.7"
+        "symfony/symfony": ">2.7"
     },
     "autoload": {
         "psr-0": { "Joubjoub\\RelationshipBundle": "" }
