@@ -1,5 +1,5 @@
 {
-    "name": "webwarejp/relationship-bundle",
+    "name": "openpp/relationship-bundle",
     "description": "Provides relationship between linkable object (like friendship...) for your Symfony2 application.",
     "license": "MIT",
     "require": {
