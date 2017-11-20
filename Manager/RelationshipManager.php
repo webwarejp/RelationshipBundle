@@ -100,7 +100,7 @@ class RelationshipManager {
     }
     
     
-    private function initQb() {
+    protected function initQb() {
          $qb = $this->repository->createQueryBuilder('rs')
                 ->join('rs.linked', 'ru')
                 ->join('rs.linker', 'u')
